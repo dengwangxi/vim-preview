@@ -553,6 +553,7 @@ endfunc
 " goto preview file
 "----------------------------------------------------------------------
 function! preview#preview_goto(cmd)
+        execute 'cclose'
 	let uid = preview#window_uid('%', '%')
 	let pid = preview#preview_check()
 	if pid == 0 || &previewwindow != 0 || uid == pid
@@ -560,10 +561,10 @@ function! preview#preview_goto(cmd)
 		return
 	endif
 	if index(['quickfix', 'help', 'nofile'], &buftype) >= 0
-		if a:mode == '' || a:mode == '0' || a:mode == '!'
-			exec "norm! \<esc>"
-			return
-		endif
+		"if a:mode == '' || a:mode == '0' || a:mode == '!'
+		"	exec "norm! \<esc>"
+		"	return
+		"endif
 	endif
 	let [l:tabnr, l:winnr] = preview#window_find(pid)
 	silent! wincmd P
@@ -576,6 +577,7 @@ function! preview#preview_goto(cmd)
 		silent exec ''.l:line
 		call preview#window_up(0)
 	endif
+        call preview#preview_close()	
 endfunc
 
 
